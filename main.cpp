@@ -5,37 +5,47 @@
 
 using namespace std;
 
-unsigned short const int nY=20, nX=70;
-
-void glider(bool tablica[][nX]);
-void los(bool tablica[][nX]);
+void glider(bool **tablica, int nY, int nX);
+void los(bool **tablica, int nY, int nX);
 int mod (int a, int b);
-void przeliczGeneracjeNaKomorce(bool tablica[][nX], bool bTymczasowa[][nX]);
-void kopiujTablice(bool tablica[][nX], bool bTymczasowa[][nX]);
-void kolejnaGeneracja(bool tablica[][nX], bool bTymczasowa[][nX]);
-void drukujTablice(bool tablica[][nX]);
+void przeliczGeneracjeNaKomorce(bool **tablica, bool **bTymczasowa, int nY, int nX);
+void kopiujTablice(bool **tablica, bool **bTymczasowa, int nY, int nX);
+void kolejnaGeneracja(bool **tablica, int nY, int nX);
+void drukujTablice(bool **tablica, int nY, int nX);
 bool czyKonczyc(int i);
 
 int main()
 {
+    unsigned short int nX=70, nY=20;
     srand(time(NULL));
-    bool tablica[nY][nX]={}, bTymczasowa[nY][nX]={};
-    //los(tablica);
-    glider(tablica);
+
+    bool ** tablica = new bool * [nY];
+    for(int i=0; i<nY; i++)
+    {
+        tablica[i] = new bool[nX];
+    }
+
+    //los(tablica, nY, nX);
+    glider(tablica, nY, nX);
     system("color a");
     for(int i=1; ; i++)
     {
-        drukujTablice(tablica);
-        kolejnaGeneracja(tablica, bTymczasowa);
+        drukujTablice(tablica, nY, nX);
+        kolejnaGeneracja(tablica, nY, nX);
         Sleep(50);
         if(czyKonczyc(i)==1)
         {
+            for(int i=0; i<nY; i++)
+            {
+                delete [] tablica[i];
+            }
+            delete [] tablica;
             return 0;
         }
     }
 }
 
-void glider(bool tablica[][nX])
+void glider(bool **tablica, int nY, int nX)
 {
     tablica[5][5] = 1;
     tablica[6][6] = 1;
@@ -44,7 +54,7 @@ void glider(bool tablica[][nX])
     tablica[7][6] = 1;
 }
 
-void los(bool tablica[][nX])
+void los(bool **tablica, int nY, int nX)
 {
     bool *wb;
     wb = &tablica[0][0];
@@ -72,8 +82,9 @@ int mod (int a, int b)
    return ret;
 }
 
-void przeliczGeneracjeNaKomorce(bool tablica[][nX], bool bTymczasowa[][nX])
+void przeliczGeneracjeNaKomorce(bool **tablica, bool **bTymczasowa, int nY, int nX)
 {
+
     for(int y=0; y<nY; y++)
     {
         for(int x=0; x<nX; x++)
@@ -111,7 +122,7 @@ void przeliczGeneracjeNaKomorce(bool tablica[][nX], bool bTymczasowa[][nX])
     }
 }
 
-void kopiujTablice(bool tablica[][nX], bool bTymczasowa[][nX])
+void kopiujTablice(bool **tablica, bool **bTymczasowa, int nY, int nX)
 {
     for(int y=0; y<nY; y++)
     {
@@ -122,13 +133,25 @@ void kopiujTablice(bool tablica[][nX], bool bTymczasowa[][nX])
     }
 }
 
-void kolejnaGeneracja(bool tablica[][nX], bool bTymczasowa[][nX])
+void kolejnaGeneracja(bool **tablica, int nY, int nX)
 {
-    przeliczGeneracjeNaKomorce(tablica, bTymczasowa);
-    kopiujTablice(tablica, bTymczasowa);
+    bool ** bTymczasowa = new bool * [nY];
+    for(int i=0; i<nY; i++)
+    {
+        bTymczasowa[i] = new bool [nX];
+    }
+
+    przeliczGeneracjeNaKomorce(tablica, bTymczasowa, nY, nX);
+    kopiujTablice(tablica, bTymczasowa, nY, nX);
+
+    for(int i=0; i<nY; i++)
+    {
+        delete [] bTymczasowa[i];
+    }
+    delete [] bTymczasowa;
 }
 
-void drukujTablice(bool tablica[][nX])
+void drukujTablice(bool **tablica, int nY, int nX)
 {
     system("cls");
     cout<<"------------------------------------------------------------------------"<<endl;
