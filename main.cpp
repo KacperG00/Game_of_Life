@@ -8,7 +8,8 @@ using namespace std;
 unsigned short const int nY=20, nX=70;
 
 void glider(bool tablica[][nX]);
-//void los(bool tablica[][nX]);
+void los(bool tablica[][nX]);
+int mod (int a, int b);
 void przeliczGeneracjeNaKomorce(bool tablica[][nX], bool bTymczasowa[][nX]);
 void kopiujTablice(bool tablica[][nX], bool bTymczasowa[][nX]);
 void kolejnaGeneracja(bool tablica[][nX], bool bTymczasowa[][nX]);
@@ -21,7 +22,7 @@ int main()
     bool tablica[nY][nX]={}, bTymczasowa[nY][nX]={};
     //los(tablica);
     glider(tablica);
-    system("color 5");      //NIE MOGŁEM SIĘ POWSTRZYMAĆ :P
+    system("color a");
     for(int i=1; ; i++)
     {
         drukujTablice(tablica);
@@ -43,7 +44,6 @@ void glider(bool tablica[][nX])
     tablica[7][6] = 1;
 }
 
-/*
 void los(bool tablica[][nX])
 {
     bool *wb;
@@ -63,7 +63,14 @@ void los(bool tablica[][nX])
         }
     }
 }
-*/
+
+int mod (int a, int b)
+{
+   int ret = a % b;
+   if(ret < 0)
+     ret+=b;
+   return ret;
+}
 
 void przeliczGeneracjeNaKomorce(bool tablica[][nX], bool bTymczasowa[][nX])
 {
@@ -75,70 +82,63 @@ void przeliczGeneracjeNaKomorce(bool tablica[][nX], bool bTymczasowa[][nX])
 
             if((y!=0)||(y!=nY-1)||(x!=0)||(x!=nX-1))
             {
-                nLive = tablica[y-1][x-1]+tablica[y][x-1]+tablica[y+1][x-1]
-                        +tablica[y-1][x]+tablica[y+1][x]
-                        +tablica[y-1][x+1]+tablica[y][x+1]+tablica[y+1][x+1];
+                nLive = tablica[mod(y-1, nY)][mod(x-1, nX)]+tablica[y][mod(x-1, nX)]+tablica[mod(y+1, nY)][mod(x-1, nX)]
+                    +tablica[mod(y-1, nY)][mod(x, nX)]+tablica[mod(y+1, nY)][mod(x, nX)]
+                    +tablica[mod(y-1, nY)][mod(x+1, nX)]+tablica[mod(y, nY)][mod(x+1, nX)]+tablica[mod(y+1, nY)][mod(x+1, nX)];
             }
             else if(y==0)
             {
                 if(x==0)
                 {
-                    nLive = tablica[y+1][x]+tablica[y][x+1]+tablica[y+1][x+1];
-                    nLive += tablica[1][nX-1]+tablica[0][nX-1]
-                             +tablica[nY-1][nX-1]
-                             +tablica[nY-1][0]+tablica[nY-1][1];
-
+                    nLive = tablica[mod(y-1, nY)][mod(x-1, nX)]+tablica[y][mod(x-1, nX)]+tablica[mod(y+1, nY)][mod(x-1, nX)]
+                        +tablica[mod(y-1, nY)][mod(x, nX)]+tablica[mod(y+1, nY)][mod(x, nX)]
+                        +tablica[mod(y-1, nY)][mod(x+1, nX)]+tablica[mod(y, nY)][mod(x+1, nX)]+tablica[mod(y+1, nY)][mod(x+1, nX)];
                 }
                 else if(x==nX-1)
                 {
-                    nLive = tablica[y+1][x]+tablica[y][x+1]+tablica[y+1][x+1];
-                    nLive += tablica[0][1]+tablica[0][0]
-                             +tablica[nY-1][0]
-                             +tablica[nY-1][nX-2]+tablica[nY-1][nX-1];
+                    nLive = tablica[mod(y-1, nY)][mod(x-1, nX)]+tablica[y][mod(x-1, nX)]+tablica[mod(y+1, nY)][mod(x-1, nX)]
+                        +tablica[mod(y-1, nY)][mod(x, nX)]+tablica[mod(y+1, nY)][mod(x, nX)]
+                        +tablica[mod(y-1, nY)][mod(x+1, nX)]+tablica[mod(y, nY)][mod(x+1, nX)]+tablica[mod(y+1, nY)][mod(x+1, nX)];
                 }
                 else
                 {
-                    nLive = tablica[y][x-1]+tablica[y+1][x-1]
-                            +tablica[y+1][x]
-                            +tablica[y][x+1]+tablica[y+1][x+1];
-                    nLive += tablica[nY-1][x-1]+tablica[nY-1][x]+tablica[nY-1][x+1];
+                    nLive = tablica[mod(y-1, nY)][mod(x-1, nX)]+tablica[y][mod(x-1, nX)]+tablica[mod(y+1, nY)][mod(x-1, nX)]
+                        +tablica[mod(y-1, nY)][mod(x, nX)]+tablica[mod(y+1, nY)][mod(x, nX)]
+                        +tablica[mod(y-1, nY)][mod(x+1, nX)]+tablica[mod(y, nY)][mod(x+1, nX)]+tablica[mod(y+1, nY)][mod(x+1, nX)];
                 }
             }
             else if(y==nY-1)
             {
                 if(x==0)
                 {
-                    nLive = tablica[y-1][x]+tablica[y-1][x+1]+tablica[y][x+1];
-                    nLive += tablica[0][1]+tablica[0][0]
-                             +tablica[0][nX-1]
-                             +tablica[nY-2][nX-1]+tablica[nY-1][nX-1];
+                    nLive = tablica[mod(y-1, nY)][mod(x-1, nX)]+tablica[y][mod(x-1, nX)]+tablica[mod(y+1, nY)][mod(x-1, nX)]
+                        +tablica[mod(y-1, nY)][mod(x, nX)]+tablica[mod(y+1, nY)][mod(x, nX)]
+                        +tablica[mod(y-1, nY)][mod(x+1, nX)]+tablica[mod(y, nY)][mod(x+1, nX)]+tablica[mod(y+1, nY)][mod(x+1, nX)];
                 }
                 else if(x==nX-1)
                 {
-                    nLive = tablica[y-1][x-1]+tablica[y][x-1]+tablica[y-1][x];
-                    nLive += tablica[nY-2][0]+tablica[nY-1][0]
-                             +tablica[0][0]
-                             +tablica[0][nX-2]+tablica[0][nX-1];
+                    nLive = tablica[mod(y-1, nY)][mod(x-1, nX)]+tablica[y][mod(x-1, nX)]+tablica[mod(y+1, nY)][mod(x-1, nX)]
+                        +tablica[mod(y-1, nY)][mod(x, nX)]+tablica[mod(y+1, nY)][mod(x, nX)]
+                        +tablica[mod(y-1, nY)][mod(x+1, nX)]+tablica[mod(y, nY)][mod(x+1, nX)]+tablica[mod(y+1, nY)][mod(x+1, nX)];
                 }
                 else
                 {
-                    nLive = tablica[y-1][x-1]+tablica[y][x-1]
-                            +tablica[y-1][x]
-                            +tablica[y-1][x+1]+tablica[y][x+1];
-                    nLive += tablica[0][x-1]+tablica[0][x]+tablica[0][x+1];
+                    nLive = tablica[mod(y-1, nY)][mod(x-1, nX)]+tablica[y][mod(x-1, nX)]+tablica[mod(y+1, nY)][mod(x-1, nX)]
+                        +tablica[mod(y-1, nY)][mod(x, nX)]+tablica[mod(y+1, nY)][mod(x, nX)]
+                        +tablica[mod(y-1, nY)][mod(x+1, nX)]+tablica[mod(y, nY)][mod(x+1, nX)]+tablica[mod(y+1, nY)][mod(x+1, nX)];
                 }
             }
             else if(x==0)
             {
-                nLive = tablica[y-1][x]+tablica[y+1][x]
-                        +tablica[y-1][x+1]+tablica[y][x+1]+tablica[y+1][x+1];
-                nLive += tablica[y-1][nX-1]+tablica[y][nX-1]+tablica[y+1][nX-1];
+                nLive = tablica[mod(y-1, nY)][mod(x-1, nX)]+tablica[y][mod(x-1, nX)]+tablica[mod(y+1, nY)][mod(x-1, nX)]
+                    +tablica[mod(y-1, nY)][mod(x, nX)]+tablica[mod(y+1, nY)][mod(x, nX)]
+                    +tablica[mod(y-1, nY)][mod(x+1, nX)]+tablica[mod(y, nY)][mod(x+1, nX)]+tablica[mod(y+1, nY)][mod(x+1, nX)];
             }
             else if(x==nX-1)
             {
-                nLive = tablica[y-1][x-1]+tablica[y][x-1]+tablica[y+1][x-1]
-                        +tablica[y-1][x]+tablica[y+1][x];
-                nLive += tablica[y-1][0]+tablica[y][0]+tablica[y+1][0];
+                nLive = tablica[mod(y-1, nY)][mod(x-1, nX)]+tablica[y][mod(x-1, nX)]+tablica[mod(y+1, nY)][mod(x-1, nX)]
+                    +tablica[mod(y-1, nY)][mod(x, nX)]+tablica[mod(y+1, nY)][mod(x, nX)]
+                    +tablica[mod(y-1, nY)][mod(x+1, nX)]+tablica[mod(y, nY)][mod(x+1, nX)]+tablica[mod(y+1, nY)][mod(x+1, nX)];
             }
 
 
