@@ -1,7 +1,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <windows.h>
+// #include <windows.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -9,40 +10,40 @@ void glider(bool **tablica, int nY, int nX);
 void los(bool **tablica, int nY, int nX);
 int mod (int a, int b);
 void przeliczGeneracjeNaKomorce(bool **tablica, bool **bTymczasowa, int nY, int nX);
-void kopiujTablice(bool **tablica, bool **bTymczasowa, int nY, int nX);
-void kolejnaGeneracja(bool **tablica, int nY, int nX);
+
+bool** kolejnaGeneracja(bool **tablica, int nY, int nX);
 void drukujTablice(bool **tablica, int nY, int nX);
 bool czyKonczyc(int i);
+bool** utworzTablice(int nY, int nX);
+void usunTablice(bool **tablica, int nY);
 
 int main()
 {
     unsigned short int nX=70, nY=20;
     srand(time(NULL));
 
-    bool ** tablica = new bool * [nY];
-    for(int i=0; i<nY; i++)
-    {
-        tablica[i] = new bool[nX];
-    }
+    bool ** tablica = utworzTablice(nY, nX);
+	bool ** tablicaNowejGeneracji;
 
-    //los(tablica, nY, nX);
-    glider(tablica, nY, nX);
-    system("color a");
+    los(tablica, nY, nX);
+
+    // glider(tablica, nY, nX);
+    // system("color a");
     for(int i=1; ; i++)
     {
-        drukujTablice(tablica, nY, nX);
-        kolejnaGeneracja(tablica, nY, nX);
-        Sleep(50);
-        if(czyKonczyc(i)==1)
+	    drukujTablice(tablica, nY, nX);
+        tablicaNowejGeneracji = kolejnaGeneracja(tablica, nY, nX);
+		usunTablice(tablica, nY);
+		tablica = tablicaNowejGeneracji;
+        usleep(100000);
+        if (czyKonczyc(i)==1)
         {
-            for(int i=0; i<nY; i++)
-            {
-                delete [] tablica[i];
-            }
-            delete [] tablica;
-            return 0;
+            usunTablice(tablica, nY);
+            break;
         }
     }
+	
+	return 0;
 }
 
 void glider(bool **tablica, int nY, int nX)
@@ -56,30 +57,30 @@ void glider(bool **tablica, int nY, int nX)
 
 void los(bool **tablica, int nY, int nX)
 {
-    bool *wb;
-    wb = &tablica[0][0];
     int nLosowa;
 
-    for(int i=0; i<nX*nY; i++)
-    {
-        nLosowa=rand() %100 +1;
-        if(nLosowa<26)
-        {
-            *(wb++)=1;
-        }
-        else
-        {
-            *(wb++)=0;
-        }
+    for(int y=0; y<nY; ++y) {
+		for (int x=0; x<nX; ++x) {
+	        nLosowa=rand() %100 +1;
+	        if(nLosowa<26)
+	        {
+	            tablica[y][x]=1;
+	        }
+	        else
+	        {
+	            tablica[y][x]=0;
+	        }			
+		}
     }
 }
 
 int mod (int a, int b)
 {
-   int ret = a % b;
-   if(ret < 0)
-     ret+=b;
-   return ret;
+	int ret = a % b;
+	if (ret < 0) {
+		ret+=b;   	
+	}
+	return ret;
 }
 
 void przeliczGeneracjeNaKomorce(bool **tablica, bool **bTymczasowa, int nY, int nX)
@@ -122,38 +123,36 @@ void przeliczGeneracjeNaKomorce(bool **tablica, bool **bTymczasowa, int nY, int 
     }
 }
 
-void kopiujTablice(bool **tablica, bool **bTymczasowa, int nY, int nX)
+bool** kolejnaGeneracja(bool **tablica, int nY, int nX)
 {
-    for(int y=0; y<nY; y++)
-    {
-        for(int x=0; x<nX; x++)
-        {
-            tablica[y][x]=bTymczasowa[y][x];
-        }
-    }
+	bool **bTymczasowa = utworzTablice(nY, nX);
+    przeliczGeneracjeNaKomorce(tablica, bTymczasowa, nY, nX);
+	return bTymczasowa;
 }
 
-void kolejnaGeneracja(bool **tablica, int nY, int nX)
+bool** utworzTablice(int nY, int nX) 
 {
-    bool ** bTymczasowa = new bool * [nY];
+    bool** bTymczasowa = new bool* [nY];
     for(int i=0; i<nY; i++)
     {
         bTymczasowa[i] = new bool [nX];
     }
+	
+	return bTymczasowa;
+}
 
-    przeliczGeneracjeNaKomorce(tablica, bTymczasowa, nY, nX);
-    kopiujTablice(tablica, bTymczasowa, nY, nX);
-
+void usunTablice(bool **tablica, int nY) 
+{
     for(int i=0; i<nY; i++)
     {
-        delete [] bTymczasowa[i];
+        delete [] tablica[i];
     }
-    delete [] bTymczasowa;
+    delete [] tablica;
 }
 
 void drukujTablice(bool **tablica, int nY, int nX)
 {
-    system("cls");
+    system("clear");
     cout<<"------------------------------------------------------------------------"<<endl;
     for(int y=0; y<nY; y++)
     {
@@ -187,8 +186,6 @@ bool czyKonczyc(int i)
             case 2: return 1;
         }
     }
-    else
-    {
-        return 0;
-    }
+    return 0;
+
 }
