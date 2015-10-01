@@ -5,21 +5,21 @@ using namespace std;
 
 int main()
 {
-    unsigned short int nY=20, nX=70, nrGeneracji=0;
-    short int V=1;
-    srand(time(NULL));
+    	unsigned short int nY=20, nX=70, nrGeneracji=0;
+    	short int V=1;
+    	srand(time(NULL));
 
-    bool ** tablica = utworzTablice(nY, nX);
+    	bool ** tablica = utworzTablice(nY, nX);
 
-    los(tablica, nY, nX);
-    //glider(tablica, nY, nX);
+    	los(tablica, nY, nX);
+    	//glider(tablica, nY, nX);
     
-    char c;
-    int i=0;
+    	char c;
+    	int i=0;
     
-    nonblock(NB_ENABLE);
-    while(!i)
-    {
+    	nonblock(NB_ENABLE);
+ 	while(!i)
+    	{
 		nrGeneracji++;
 		usleep(100000*V);
 		i=kbhit();
@@ -29,7 +29,7 @@ int main()
 			if(c=='q')
 			{
 				usunTablice(tablica, nY);
-				system("^C");
+				return 0;
 			}
 			else if(c=='s')
 			{
@@ -48,10 +48,10 @@ int main()
 			}
 		}
 		drukujTablice(tablica, nY, nX, nrGeneracji);
-        bool ** bTymczasowa = utworzTablice(nY, nX);
-        bTymczasowa = kolejnaGeneracja(tablica, bTymczasowa, nY, nX);
-        usunTablice(tablica, nY);
-        tablica = bTymczasowa;
+        	bool ** bTymczasowa = utworzTablice(nY, nX);
+        	bTymczasowa = kolejnaGeneracja(tablica, bTymczasowa, nY, nX);
+        	usunTablice(tablica, nY);
+        	tablica = bTymczasowa;
 	}
-    nonblock(NB_DISABLE);
+    	nonblock(NB_DISABLE);
 }
