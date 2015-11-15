@@ -2,7 +2,6 @@
 #include <cstdlib>
 #include <ctime>
 #include <unistd.h>
-#include "functions.h"
 
 using namespace std;
 
@@ -13,6 +12,15 @@ bool ** utworzTablice(int nY, int nX)
 	{
 		tablica[i] = new bool[nX];
 	}
+	
+	for(int y=0; y<nY; y++)
+	{
+		for(int x=0; x<nX; x++)
+		{
+			tablica[y][x]=0;
+		}
+	}
+	
 	return tablica;
 }
 
@@ -62,6 +70,84 @@ void los(bool **tablica, int nY, int nX)
     }
 }
 
+void drukujTablice(bool **tablica, int nY, int nX, unsigned long int nrGeneracji)
+{
+    system("clear");
+    cout<<"Wcisnij: ESC:wyjscie|'-':zwolnij|'+':przyspiesz|SPACJA:zatrzymaj"<<endl;
+    for(int x=0; x<nX+2; x++)
+    {
+		cout<<'-';
+	}
+	cout<<endl;
+    for(int y=0; y<nY; y++)
+    {
+        cout<<"|";
+        for(int x=0; x<nX; x++)
+        {
+            if(tablica[y][x]==0)
+            {
+                cout<<' ';
+            }
+            else if(tablica[y][x]==1)
+            {
+                cout<<'*';
+            }
+        }
+        cout<<"|"<<endl;
+    }
+    for(int x=0; x<nX+2; x++)
+    {
+		cout<<'-';
+	}
+    cout<<endl<<"Numer generacji: "<<nrGeneracji<<endl;
+}
+
+void drukujTabliceEdycja(bool **tablica, int nY, int nX, unsigned long int nrGeneracji, int Y, int X)
+{
+	system("clear");
+    cout<<"Wcisnij: ESC:wyjscie|'-':zwolnij|'+':przyspiesz|SPACJA:zatrzymaj"<<endl;
+    for(int x=0; x<nX+2; x++)
+    {
+		cout<<'-';
+	}
+	cout<<endl;
+    for(int y=0; y<nY; y++)
+    {
+        cout<<"|";
+        for(int x=0; x<nX; x++)
+        {
+			if((y==Y)&&(x==X))
+			{
+				if(tablica[y][x]==0)
+				{
+					cout<<'.';
+				}
+				else if(tablica[y][x]==1)
+				{
+					cout<<'^';
+				}
+			}
+			else
+			{
+				if(tablica[y][x]==0)
+				{
+					cout<<' ';
+				}
+				else if(tablica[y][x]==1)
+				{
+					cout<<'*';
+				}
+			}
+        }
+        cout<<"|"<<endl;
+    }
+    for(int x=0; x<nX+2; x++)
+    {
+		cout<<'-';
+	}
+    cout<<endl<<"Numer generacji: "<<nrGeneracji<<endl;
+}
+
 int mod (int a, int b)
 {
    int ret = a % b;
@@ -72,7 +158,6 @@ int mod (int a, int b)
 
 void przeliczGeneracjeNaKomorce(bool **tablica, bool **bTymczasowa, int nY, int nX)
 {
-
     for(int y=0; y<nY; y++)
     {
         for(int x=0; x<nX; x++)
@@ -114,43 +199,4 @@ bool ** kolejnaGeneracja(bool **tablica, bool **bTymczasowa, int nY, int nX)
 {
     przeliczGeneracjeNaKomorce(tablica, bTymczasowa, nY, nX);
     return bTymczasowa;
-}
-
-void drukujTablice(bool **tablica, int nY, int nX)
-{
-    system("clear");
-    cout<<"------------------------------------------------------------------------"<<endl;
-    for(int y=0; y<nY; y++)
-    {
-        cout<<"|";
-        for(int x=0; x<nX; x++)
-        {
-            if(tablica[y][x]==0)
-            {
-                cout<<' ';
-            }
-            else
-            {
-                cout<<'*';
-            }
-        }
-        cout<<"|"<<endl;
-    }
-    cout<<"------------------------------------------------------------------------"<<endl;
-}
-
-bool czyKonczyc(int i)
-{
-    if(i%100==0)
-    {
-        cout<<endl<<endl<<"  1. Continue"<<endl<<"  2. Exit"<<endl<<"   Your choise: ";
-        int wybor;
-        cin>>wybor;
-        switch(wybor)
-        {
-            case 1: return 0;
-            case 2: return 1;
-        }
-    }
-    return 0;
 }
