@@ -1,4 +1,7 @@
-#include "EditMode.cpp"
+#include <iostream>
+#include "EditMode.h"
+#include "non-blocking.h"
+#include "functions.h"
 
 using namespace std;
 
