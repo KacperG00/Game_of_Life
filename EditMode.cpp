@@ -1,5 +1,7 @@
+#include <iostream>
+#include "EditMode.h"
 #include "functions.h"
-#include "non-blocking.cpp"
+#include "non-blocking.h"
 
 using namespace std;
 
