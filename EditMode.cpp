@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <ctime>
-#include <iostream>
 #include "EditMode.h"
 #include "functions.h"
 #include "non-blocking.h"
@@ -16,16 +15,12 @@ int edytuj(bool **tablica, int nY, int nX, unsigned long int nrGeneracji)
 	unsigned int iterator=0;
 	
 	char c;
-    int i=0;
-    nonblock(NB_ENABLE);
+	int i=0;
+	nonblock(NB_ENABLE);
 	while(!i)
-    {
+	{
 		if(iterator%2==0)
 		{
-			if((iterator%10<5)||(iterator%10>=5))
-			{
-				drukujTabliceEdycja(tablica, nY, nX, nrGeneracji, Y, X);
-			}
 			if(iterator%10<5)
 			{
 				drukujTabliceEdycja(tablica, nY, nX, nrGeneracji, Y, X);
@@ -51,10 +46,7 @@ int edytuj(bool **tablica, int nY, int nX, unsigned long int nrGeneracji)
 				case 'l': los(tablica, nY, nX); break;
 				case (char)32: return 0; break;
 				case (char)27: return 1; break;
-							else if(tablica[Y][X]==0) tablica[Y][X]=1;
-					break;
-				case (char)32: return 0; break;
-				case (char)27: usunTablice(tablica, nY); return 0; break;
+							else if(tablica[Y][X]==0) tablica[Y][X]=1; break;
 			}
 			
 			i=0;
