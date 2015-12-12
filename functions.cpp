@@ -1,7 +1,12 @@
 #include <iostream>
+<<<<<<< HEAD
 #include <cstdlib>
+#include <stdio.h>
 #include <ctime>
 #include <unistd.h>
+=======
+>>>>>>> f84cb32387f86a6b3b4c4e46274b6d7ccbb19c72
+#include "functions.h"
 
 using namespace std;
 
@@ -35,13 +40,6 @@ void usunTablice(bool ** tablica, int nY)
 
 void glider(bool **tablica, int nY, int nX)
 {
-	for(int y=0; y<nY; y++)
-    {
-		for(int x=0; x<nX; x++)
-		{
-			tablica[y][x]=0;
-		}
-    }
     tablica[5][5] = 1;
     tablica[6][6] = 1;
     tablica[7][4] = 1;
@@ -51,6 +49,7 @@ void glider(bool **tablica, int nY, int nX)
 
 void los(bool **tablica, int nY, int nX)
 {
+	srand(time(NULL));
     int nLosowa;
 
     for(int y=0; y<nY; y++)
