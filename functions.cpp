@@ -1,8 +1,11 @@
 #include <iostream>
+<<<<<<< HEAD
 #include <cstdlib>
 #include <stdio.h>
 #include <ctime>
 #include <unistd.h>
+=======
+>>>>>>> f84cb32387f86a6b3b4c4e46274b6d7ccbb19c72
 #include "functions.h"
 
 using namespace std;

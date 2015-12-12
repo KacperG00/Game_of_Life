@@ -3,8 +3,7 @@
 #include <termios.h>
 #include <stdio.h>
 #include <unistd.h>
-#define NB_ENABLE 0
-#define NB_DISABLE 1
+#include "non-blocking.h"
 
 using namespace std;
 

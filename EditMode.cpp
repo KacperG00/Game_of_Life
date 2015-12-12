@@ -1,7 +1,11 @@
+<<<<<<< HEAD
 #include <cstdlib>
 #include <stdio.h>
 #include <unistd.h>
 #include <ctime>
+=======
+#include <iostream>
+>>>>>>> f84cb32387f86a6b3b4c4e46274b6d7ccbb19c72
 #include "EditMode.h"
 #include "functions.h"
 #include "non-blocking.h"
@@ -21,10 +25,21 @@ int edytuj(bool **tablica, int nY, int nX, unsigned long int nrGeneracji)
     {
 		if(iterator%2==0)
 		{
+<<<<<<< HEAD
 			if((iterator%10<5)||(iterator%10>=5))
 			{
 				drukujTabliceEdycja(tablica, nY, nX, nrGeneracji, Y, X);
 			}
+=======
+			if(iterator%10<5)
+			{
+				drukujTabliceEdycja(tablica, nY, nX, nrGeneracji, Y, X);
+			}
+			else if(iterator%10>=5)
+			{
+				drukujTablice(tablica, nY, nX, nrGeneracji);
+			}
+>>>>>>> f84cb32387f86a6b3b4c4e46274b6d7ccbb19c72
 		}
 		
 		i=kbhit();
@@ -38,10 +53,17 @@ int edytuj(bool **tablica, int nY, int nX, unsigned long int nrGeneracji)
 				case 'a': if(X>0)X=X-1; break;
 				case 'd': if(X<nX-1)X=X+1; break;
 				case 'z': if(tablica[Y][X]==1) tablica[Y][X]=0;
+<<<<<<< HEAD
 							else if(tablica[Y][X]==0) tablica[Y][X]=1; break;
 				case 'l': los(tablica, nY, nX); break;
 				case (char)32: return 0; break;
 				case (char)27: return 1; break;
+=======
+							else if(tablica[Y][X]==0) tablica[Y][X]=1;
+					break;
+				case (char)32: return 0; break;
+				case (char)27: usunTablice(tablica, nY); return 0; break;
+>>>>>>> f84cb32387f86a6b3b4c4e46274b6d7ccbb19c72
 			}
 			
 			i=0;
