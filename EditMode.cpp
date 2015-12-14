@@ -46,7 +46,6 @@ int edytuj(bool **tablica, int nY, int nX, unsigned long int nrGeneracji)
 				case 'l': los(tablica, nY, nX); break;
 				case (char)32: return 0; break;
 				case (char)27: return 1; break;
-							else if(tablica[Y][X]==0) tablica[Y][X]=1; break;
 			}
 			
 			i=0;

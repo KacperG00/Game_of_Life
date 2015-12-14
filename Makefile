@@ -2,9 +2,6 @@ all: main
 
 main: main.o functions.o non-blocking.o EditMode.o Menu.o game.o
 	g++ main.o functions.o non-blocking.o EditMode.o Menu.o game.o -o main
-	
-main: main.o functions.o non-blocking.o EditMode.o
-	g++ main.o functions.o non-blocking.o EditMode.o -o main
 
 main.o: main.cpp
 	g++ -c main.cpp
