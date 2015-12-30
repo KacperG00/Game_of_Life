@@ -4,12 +4,12 @@
 #include <cstdlib>
 #include <unistd.h>
 #include "functions.h"
-#include "game.h"
+#include "EditMode.h"
 #include "Menu.h"
 
 using namespace std;
 
-int nowaPlansza(unsigned short int nY, unsigned short int nX)
+int nowaPlansza(int nY, int nX)
 {
 	for(;;)
 	{
@@ -24,9 +24,10 @@ int nowaPlansza(unsigned short int nY, unsigned short int nX)
 		switch(wybor)
 		{
 			case 1: 
-				{	
+				{
+					unsigned long int nGeneracji = 0;
 					bool ** tablica = utworzTablice(nY, nX);
-					game(nY, nX, tablica);
+					edytuj(tablica, nY, nX, nGeneracji);
 				}
 				break;
 			case 2:
@@ -43,7 +44,7 @@ int nowaPlansza(unsigned short int nY, unsigned short int nX)
 	}
 }
 
-int Menu(unsigned short int nY, unsigned short int nX)
+int Menu(int nY, int nX)
 {
 	for(;;)
 	{
@@ -58,7 +59,19 @@ int Menu(unsigned short int nY, unsigned short int nX)
 		switch(wybor)
 		{
 			case 1: nowaPlansza(nY, nX); break;
-			case 3: return 0;
+			case 2:
+			{
+				int* y = &nY;
+				int* x = &nX;
+				bool ** tablica = wczytajPlansze(y, x);
+				if(tablica != NULL)
+				{
+					unsigned long int nGeneracji = 0;
+					edytuj(tablica, nY, nX, nGeneracji);
+				}
+				
+			} break;
+			case 3: return 0; break;
 		}
 	}
 }

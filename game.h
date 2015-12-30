@@ -1,1 +1,8 @@
-int game(unsigned short int nY, unsigned short int nX, bool **tablica);
+struct zwracana
+{
+	bool ** tablica;
+	unsigned long int nrGen;
+	int wynik;
+};
+
+zwracana game(int nY, int nX, bool **tablica, unsigned long int nrGen);

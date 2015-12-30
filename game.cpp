@@ -2,19 +2,15 @@
 #include <stdio.h>
 #include "functions.h"
 #include "non-blocking.h"
-#include "EditMode.h"
 #include "game.h"
 
-using namespace std;
-
-int game(unsigned short int nY, unsigned short int nX, bool **tablica)
+zwracana game(int nY, int nX, bool **tablica, unsigned long int nrGen)
 {
     int V=1;
 	
 	char c;
     int i=0;
     unsigned long int iterator=0;
-    unsigned long int nrGen=0;
     
     nonblock(NB_ENABLE);
     while(!i)
@@ -31,7 +27,6 @@ int game(unsigned short int nY, unsigned short int nX, bool **tablica)
 			usunTablice(tablica, nY);
 			tablica = bTymczasowa;
 		}
-		usleep(200000/V);
 		
 		
 		i=kbhit();
@@ -40,30 +35,44 @@ int game(unsigned short int nY, unsigned short int nX, bool **tablica)
 			c=fgetc(stdin);
 			switch(c)
 			{
-				case (char)27: usunTablice(tablica, nY); return 0;	//ESC
-				case (char)32:										//Spacja
-					if(edytuj(tablica, nY, nX, nrGen)==1)
-					{
-						usunTablice(tablica, nY);
-						return 0;
-					} break;
+				case (char)27:
+				{
+					zwracana doEdycji;
+					doEdycji.tablica = tablica;
+					doEdycji.nrGen = nrGen;
+					doEdycji.wynik = 1;
+					return doEdycji;
+				} break;
+				case (char)9:
+				{
+					zwracana doEdycji;
+					doEdycji.tablica = tablica;
+					doEdycji.nrGen = nrGen;
+					doEdycji.wynik = 0;
+					return doEdycji;
+				} break;
 				case '+': V+=1; break;
-				case '-': V-=1;
+				case '-':
+				{
+					V--;
 					if(V<=0)
 					{
-						if(edytuj(tablica, nY, nX, nrGen)==0) V++;
-						else if(edytuj(tablica, nY, nX, nrGen)==1)
-						{
-							usunTablice(tablica, nY);
-							return 0;
-						}
-					} break;
+						zwracana doEdycji;
+						doEdycji.tablica = tablica;
+						doEdycji.nrGen = nrGen;
+						doEdycji.wynik = 0;
+						return doEdycji;
+					}
+				} break;
 				case '*': V=V*2; break;
-				case '/': if(V%2==1)
-						  {
-							  V++;
-						  }
-						  V=V/2; break;
+				case '/':
+				{
+					if(V%2==1)
+					{
+						V++;
+					}
+					V=V/2;
+				} break;
 				case '1': V=1; break;
 				case '2': V=5; break;
 				case '3': V=10; break;
@@ -73,6 +82,7 @@ int game(unsigned short int nY, unsigned short int nX, bool **tablica)
 			
 			i=0;
 		}
+		usleep(200000/V);
 		iterator++;
 	}
     nonblock(NB_DISABLE);

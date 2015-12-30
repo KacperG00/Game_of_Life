@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <ctime>
 #include <unistd.h>
+#include <string>
+#include <fstream>
+#include <dirent.h>
 #include "functions.h"
 
 using namespace std;
@@ -33,15 +36,6 @@ void usunTablice(bool ** tablica, int nY)
 		delete [] tablica[i];
 	}
 	delete [] tablica;
-}
-
-void glider(bool **tablica, int nY, int nX)
-{
-	tablica[5][5] = 1;
-	tablica[6][6] = 1;
-	tablica[7][4] = 1;
-	tablica[7][5] = 1;
-	tablica[7][6] = 1;
 }
 
 void los(bool **tablica, int nY, int nX)
@@ -194,4 +188,83 @@ bool ** kolejnaGeneracja(bool **tablica, bool **bTymczasowa, int nY, int nX)
 {
     	przeliczGeneracjeNaKomorce(tablica, bTymczasowa, nY, nX);
     	return bTymczasowa;
+}
+
+bool ** wczytajPlansze(int* nY, int* nX)
+{
+	system("ls Plansze/");
+	cout<<"\n\n Wybierz plik: ";
+	string nazwaPliku;
+	cin>>nazwaPliku;
+	
+	bool** tablica = NULL;
+	if(nazwaPliku == "wroc")
+	{
+		return tablica;
+	}
+	
+	string linia;
+	
+	ifstream plik(("Plansze/"+nazwaPliku).c_str());
+	
+	int test = 0;
+	int test2 = 0;
+	
+	getline(plik, linia);
+	test = atoi(linia.c_str());
+	getline(plik, linia);
+	test2 = atoi(linia.c_str());
+	if((test > 5) && (test2 >5))
+	{
+		*nY = test;
+		*nX = test2;
+	}
+	else
+	{
+		cout<<"Tablica musi miec przynajmniej 6 wierszy i 6 kolumn"<<endl;
+		return tablica;
+	}
+	cout<<*nX<<endl;
+	getline(plik, linia);
+	
+	plik.close();
+	tablica = utworzTablice(*nY, *nX);
+	int y=0;
+	int x=0;
+	int i=0;
+	do
+	{
+		tablica[y][x] = (linia[i] == '1');
+		
+		i++;
+		x++;
+		if(x>=*nX)
+		{
+			x=0;
+			y++;
+		}
+	} while(y<*nY);
+	return tablica;
+}
+
+void zapiszPlansze(bool **tablica, int nY, int nX)
+{
+	string nazwaPliku;
+	
+	cout<<"Nazwa pliku: ";
+	cin>>nazwaPliku;
+	
+	ofstream plik(("Plansze/"+nazwaPliku+".txt").c_str());
+	
+	plik<<nY<<endl;
+	plik<<nX<<endl;
+	for(int y=0; y<nY; y++)
+	{
+		for(int x=0; x<nX; x++)
+		{
+			plik<<tablica[y][x];
+		}
+	}
+	
+	plik.close();
 }

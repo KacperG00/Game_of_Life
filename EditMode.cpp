@@ -4,9 +4,8 @@
 #include <ctime>
 #include "EditMode.h"
 #include "functions.h"
+#include "game.h"
 #include "non-blocking.h"
-
-using namespace std;
 
 int edytuj(bool **tablica, int nY, int nX, unsigned long int nrGeneracji)
 {
@@ -41,11 +40,26 @@ int edytuj(bool **tablica, int nY, int nX, unsigned long int nrGeneracji)
 				case 's': if(Y<nY-1)Y=Y+1; break;
 				case 'a': if(X>0)X=X-1; break;
 				case 'd': if(X<nX-1)X=X+1; break;
-				case 'z': if(tablica[Y][X]==1) tablica[Y][X]=0;
-							else if(tablica[Y][X]==0) tablica[Y][X]=1; break;
 				case 'l': los(tablica, nY, nX); break;
-				case (char)32: return 0; break;
-				case (char)27: return 1; break;
+				case '`': zapiszPlansze(tablica, nY, nX); break;
+				case (char)32: if(tablica[Y][X]==1) tablica[Y][X]=0;
+							else if(tablica[Y][X]==0) tablica[Y][X]=1; break;
+				case (char)9:
+				{
+					zwracana doEdycji = game(nY, nX, tablica, nrGeneracji);
+					tablica = doEdycji.tablica;
+					nrGeneracji = doEdycji.nrGen;
+					if(doEdycji.wynik == 1)
+					{
+						usunTablice(tablica, nY);
+						return 0;
+					}
+				} break;
+				case (char)27:
+				{
+					usunTablice(tablica, nY);
+					return 0;
+				} break;
 			}
 			
 			i=0;
